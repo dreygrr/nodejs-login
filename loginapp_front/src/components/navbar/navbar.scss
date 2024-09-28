@@ -1,5 +1,9 @@
 @import "../../main";
 
+:root {
+    --nav-bg: var(--slate200);
+}
+
 nav {
-    background-color: lightgray;
+    background-color: var(--nav-bg);
 }

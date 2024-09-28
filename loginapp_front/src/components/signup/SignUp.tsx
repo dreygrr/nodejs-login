@@ -4,6 +4,8 @@ import axios from 'axios';
 
 const SignUp: React.FC = () => {
   const [username, setUsername] = useState('');
+  const [name, setName] = useState('');
+  const [birthdate, setBirthdate] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
@@ -19,7 +21,7 @@ const SignUp: React.FC = () => {
       setError('Senhas não coincidem!');
     } else {
       try {
-        const response = await axios.post('http://localhost:5000/api/register', { username, password });
+        const response = await axios.post('http://localhost:5000/api/register', { username, name, birthdate, password });
         setMessage(response.data.message); // Mensagem de sucesso
       } catch (error: any) {
         if (error.response) {
@@ -45,6 +47,27 @@ const SignUp: React.FC = () => {
           required
         />
       </div>
+
+      <div>
+        <label>Name</label>
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+        />
+      </div>
+
+      <div>
+        <label>Birthdate</label>
+        <input
+          type="date"
+          value={birthdate}
+          onChange={(e) => setBirthdate(e.target.value)}
+          required
+        />
+      </div>
+
       <div>
         <label>Password</label>
         <input

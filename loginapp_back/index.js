@@ -70,6 +70,7 @@ app.post('/api/login', (req, res) => {
       if (err) {
         return res.status(500).json({ message: 'Erro no servidor' });
       }
+
       if (isMatch) {
         req.session.user = user; // Cria a sessão
         res.status(200).json({ message: 'Login bem-sucedido!' });
@@ -84,7 +85,7 @@ app.post('/api/login', (req, res) => {
 
 // Rota de registro
 app.post('/api/register', (req, res) => {
-  const { username, password } = req.body;
+  const { username, name, birthdate, password } = req.body;
 
   // Verifica se o usuário já existe
   const checkQuery = 'SELECT * FROM users WHERE username = ?';
@@ -103,8 +104,8 @@ app.post('/api/register', (req, res) => {
       }
 
       // Insere o novo usuário no banco de dados com a senha hasheada
-      const insertQuery = 'INSERT INTO users (username, password) VALUES (?, ?)';
-      db.query(insertQuery, [username, hashedPassword], (err, result) => {
+      const insertQuery = 'INSERT INTO users (username, name, birthdate, password) VALUES (?, ?, ?, ?);';
+      db.query(insertQuery, [username, name, birthdate, hashedPassword], (err, result) => {
         if (err) {
           return res.status(500).json({ message: 'Erro ao registrar usuário' });
         }
