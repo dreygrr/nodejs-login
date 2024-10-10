@@ -1,9 +1,45 @@
 @import "../../main";
 
 :root {
-    --nav-bg: var(--slate200);
+  --bg: linear-gradient(90deg, var(--blue950) 0, var(--slate950) 100%);
+
+  --item-bg: rgba(255, 255, 255, 0.1);
 }
 
+
 nav {
-    background-color: var(--nav-bg);
+  @include doFlex(row, space-between, center, 0);
+  position: fixed;
+  z-index: 10;
+  width: 100%;
+  padding: 0 1.5em;
+  background: var(--bg); color: var(--white);
+
+
+  h1 {
+    a {
+      font-size: inherit;
+      text-decoration: none;
+      color: inherit;
+    }
+  }
+
+
+  ul {
+    @include doFlex(row, flex-end, center, 1.5em);
+    list-style-type: none;
+
+    li {
+      a {
+        @include doFlex(row, center, center, .5em);
+        width: 45px; height: 45px;
+
+        text-decoration: none;
+        background-color: var(--item-bg); color: var(--white);
+        border-radius: .5em;
+
+        i {font-size: 20px;}
+      }
+    }
+  }
 }

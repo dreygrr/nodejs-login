@@ -36,19 +36,37 @@ const Navbar = () => {
 
   return (
     <nav>
-      <h1>3dlib</h1>
+      <h1 className='header-logo'><a href="#">3dlib</a></h1>
 
-      {user ? (
-        <>
-          <span>Bem-vindo, {user.username}!</span>
-          <button onClick={handleLogout}>Logout</button>
-        </>
-      ) : (
-        <>
-          <a href="/signin">Login</a>
-          <a href="/signup">Cadastro</a>
-        </>
-      )}
+      <ul>
+        {user ? (
+          <>
+            <li>
+              <a href="#">{user.username}</a>
+            </li>
+
+            <li>
+              <a href="#">
+                <button onClick={handleLogout}><i className="fa-solid fa-sign-out"></i></button>
+              </a>
+            </li>
+          </>
+        ) : (
+          <>
+            <li>
+              <a href="/signin"><i className="fa-solid fa-sign-in"></i></a>
+            </li>
+
+            <li>
+              <a href="/signup"><i className="fa-solid fa-user-plus"></i></a>
+            </li>
+          </>
+        )}
+
+        <li>
+          <a href="#"><i className="fa-solid fa-bars"></i></a>
+        </li>
+      </ul>
     </nav>
   );
 };

@@ -20,6 +20,28 @@
   --slate800: #1e293b;
   --slate900: #0f172a;
   --slate950: #020617;
+  --blue50: #eff6ff;
+  --blue100: #dbeafe;
+  --blue200: #bfdbfe;
+  --blue300: #93c5fd;
+  --blue400: #60a5fa;
+  --blue500: #3b82f6;
+  --blue600: #2563eb;
+  --blue700: #1d4ed8;
+  --blue800: #1e40af;
+  --blue900: #1e3a8a;
+  --blue950: #111d6c;
+  --indigo50: #eef2ff;
+  --indigo100: #e0e7ff;
+  --indigo200: #c7d2fe;
+  --indigo300: #a5b4fc;
+  --indigo400: #818cf8;
+  --indigo500: #6366f1;
+  --indigo600: #4f46e5;
+  --indigo700: #4338ca;
+  --indigo800: #3730a3;
+  --indigo900: #312e81;
+  --indigo950: #1e1b4b;
 }
 
 h1 {

@@ -20,6 +20,28 @@
   --slate800: #1e293b;
   --slate900: #0f172a;
   --slate950: #020617;
+  --blue50: #eff6ff;
+  --blue100: #dbeafe;
+  --blue200: #bfdbfe;
+  --blue300: #93c5fd;
+  --blue400: #60a5fa;
+  --blue500: #3b82f6;
+  --blue600: #2563eb;
+  --blue700: #1d4ed8;
+  --blue800: #1e40af;
+  --blue900: #1e3a8a;
+  --blue950: #111d6c;
+  --indigo50: #eef2ff;
+  --indigo100: #e0e7ff;
+  --indigo200: #c7d2fe;
+  --indigo300: #a5b4fc;
+  --indigo400: #818cf8;
+  --indigo500: #6366f1;
+  --indigo600: #4f46e5;
+  --indigo700: #4338ca;
+  --indigo800: #3730a3;
+  --indigo900: #312e81;
+  --indigo950: #1e1b4b;
 }
 
 h1 {
@@ -30,9 +52,49 @@ h1 {
 }
 
 :root {
-  --nav-bg: var(--slate200);
+  --bg: linear-gradient(90deg, var(--blue950) 0, var(--slate950) 100%);
+  --item-bg: rgba(255, 255, 255, 0.1);
 }
 
 nav {
-  background-color: var(--nav-bg);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0;
+  position: fixed;
+  z-index: 10;
+  width: 100%;
+  padding: 0 1.5em;
+  background: var(--bg);
+  color: var(--white);
+}
+nav h1 a {
+  font-size: inherit;
+  text-decoration: none;
+  color: inherit;
+}
+nav ul {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1.5em;
+  list-style-type: none;
+}
+nav ul li a {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5em;
+  width: 45px;
+  height: 45px;
+  text-decoration: none;
+  background-color: var(--item-bg);
+  color: var(--white);
+  border-radius: 0.5em;
+}
+nav ul li a i {
+  font-size: 20px;
 }/*# sourceMappingURL=navbar.css.map */

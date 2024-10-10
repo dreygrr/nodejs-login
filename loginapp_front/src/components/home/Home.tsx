@@ -7,7 +7,7 @@ const HomePage = () => {
       <Navbar />
 
       <main>
-        <h1>Bem-vindo ao seu site de Livros 3D!</h1>
+        <h1>write and manage your libraries in 3 dimensions</h1>
 
         <SplineExample />
       </main>
