@@ -45,6 +45,10 @@
     --indigo800: #3730a3;
     --indigo900: #312e81;
     --indigo950: #1e1b4b;
+
+
+    --default-btn-bg: var(--slate950);
+    --default-btn-txt-color: var(--white);
 }
 
 
@@ -56,3 +60,15 @@
 
 
 h1 {font-size: 3rem; font-weight: 800; letter-spacing: -.15rem; scale: 1 .85;}
+
+
+
+.btn {
+    @include doFlex(row, center, center, 1em);
+    padding: 1em;
+    text-transform: capitalize;
+    background-color: var(--default-btn-bg); color: var(--default-btn-txt-color);
+    border: 1px solid var(--default-btn-txt-color); border-radius: .5em;
+
+    cursor: pointer; transition: .2s;
+}
