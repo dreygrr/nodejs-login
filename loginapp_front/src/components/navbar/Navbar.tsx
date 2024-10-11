@@ -36,18 +36,20 @@ const Navbar = () => {
 
   return (
     <nav>
-      <h1 className='header-logo'><a href="#">3dlib</a></h1>
+      <h1 className='header-logo'><a href="/">3dlib</a></h1>
 
       <ul>
         {user ? (
           <>
             <li>
-              <a href="#">{user.username}</a>
+              <a href="/dashboard">{user.username}</a>
             </li>
 
             <li>
-              <a href="#">
-                <button onClick={handleLogout}><i className="fa-solid fa-sign-out"></i></button>
+              <a
+                href="#"
+                onClick={handleLogout}>
+                  <i className="fa-solid fa-sign-out"></i>
               </a>
             </li>
           </>

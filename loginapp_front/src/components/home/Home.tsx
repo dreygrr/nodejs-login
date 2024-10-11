@@ -1,5 +1,6 @@
 import Navbar from "./../navbar/Navbar";
-import SplineExample from "./SplineExample";
+import Banner from "./Banner";
+// import SplineExample from "./SplineExample";
 
 const HomePage = () => {
   return (
@@ -9,7 +10,9 @@ const HomePage = () => {
       <main>
         <h1>write and manage your libraries in 3 dimensions</h1>
 
-        <SplineExample />
+        {/* <SplineExample /> */}
+
+        <Banner />
       </main>
     </div>
   );
