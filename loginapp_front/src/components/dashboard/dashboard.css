@@ -77,7 +77,7 @@ h1 {
 .btn {
   position: absolute;
   z-index: 1000;
-  top: 50%;
+  bottom: 0;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, calc(0% - 1em));
 }/*# sourceMappingURL=dashboard.css.map */
