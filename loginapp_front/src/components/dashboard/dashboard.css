@@ -69,6 +69,10 @@ h1 {
   transition: 0.2s;
 }
 
+.viewport {
+  width: 100vw;
+  height: 100vh;
+}
 .viewport canvas {
   position: relative;
   z-index: 0;
