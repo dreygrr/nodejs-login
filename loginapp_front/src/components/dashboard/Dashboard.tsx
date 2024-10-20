@@ -14,8 +14,6 @@ const Dashboard: React.FC = () => {
 
       <div className="viewport">
         <Book />
-
-        <button onClick={() => alert('eita')} className='btn btn-save' type="button"><i className="fa-solid fa-cloud-arrow-up"></i> save</button>
       </div>
     </>
   );
