@@ -15,6 +15,9 @@ export default function Book() {
 
   const saveBook = () => {
     alert(splineAppRef.current.getVariable('text1') + ' ' + splineAppRef.current.getVariable('text2'));
+    
+    // @todo
+    // save book info to the db
   }
 
   return (
