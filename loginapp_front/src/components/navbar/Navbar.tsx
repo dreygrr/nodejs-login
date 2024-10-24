@@ -35,41 +35,40 @@ const Navbar = () => {
   };
 
   return (
-    <nav>
-      <h1 className='header-logo'><a href="/">3dlib</a></h1>
-
-      <ul>
-        {user ? (
-          <>
-            <li>
-              <a href="/dashboard">{user.username}</a>
-            </li>
-
-            <li>
-              <a
-                href="#"
-                onClick={handleLogout}>
-                  <i className="fa-solid fa-sign-out"></i>
-              </a>
-            </li>
-          </>
-        ) : (
-          <>
-            <li>
-              <a href="/signin"><i className="fa-solid fa-sign-in"></i></a>
-            </li>
-
-            <li>
-              <a href="/signup"><i className="fa-solid fa-user-plus"></i></a>
-            </li>
-          </>
-        )}
-
-        <li>
-          <a href="#"><i className="fa-solid fa-bars"></i></a>
-        </li>
-      </ul>
-    </nav>
+    <>
+      <nav>
+        <h1 className='header-logo'><a href="/">3dlib</a></h1>
+        <ul>
+          {user ? (
+            <>
+              <li>
+                <a href="/dashboard">{user.username}</a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  onClick={handleLogout}>
+                    <i className="fa-solid fa-sign-out"></i>
+                </a>
+              </li>
+            </>
+          ) : (
+            <>
+              <li>
+                <a href="/signin"><i className="fa-solid fa-sign-in"></i></a>
+              </li>
+              <li>
+                <a href="/signup"><i className="fa-solid fa-user-plus"></i></a>
+              </li>
+            </>
+          )}
+          <li>
+            <a href="#"><i className="fa-solid fa-bars"></i></a>
+          </li>
+        </ul>
+      </nav>
+      <div className="nav-hitbox"></div>
+    </>
   );
 };
 

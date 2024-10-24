@@ -7,9 +7,9 @@ CREATE TABLE users(
 
 CREATE TABLE books(
 	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
-    name VARCHAR(255) NOT NULL, 
+    title VARCHAR(255) NOT NULL, 
     color VARCHAR(6), 
-    text VARCHAR(255), 
+    content TEXT, 
     author VARCHAR(255) NOT NULL, 
     
     FOREIGN KEY (author) REFERENCES users (username)
@@ -18,9 +18,10 @@ CREATE TABLE books(
 CREATE TABLE shelves(
 	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
     name VARCHAR(255) NOT NULL, 
-    username VARCHAR(255) NOT NULL, 
+    author VARCHAR(255) NOT NULL, 
+    color VARCHAR(6), 
     
-    FOREIGN KEY (username) REFERENCES users (username)
+    FOREIGN KEY (author) REFERENCES users (username)
 );
 
 CREATE TABLE shelves_books(

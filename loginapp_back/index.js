@@ -139,6 +139,135 @@ app.post('/api/logout', (req, res) => {
 
 
 
+// Rota para buscar os livros de um usuário logado
+app.get('/api/books', (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).json({ message: 'Usuário não está logado' });
+  }
+
+  const username = req.session.user.username; // Pegando o username do usuário logado
+  const query = 'SELECT * FROM books WHERE author = ? ORDER BY title;'; // Usando o username como chave
+
+  db.query(query, [username], (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: 'Erro ao buscar os livros' });
+    }
+
+    res.json(results); // Retorna a lista de livros encontrados
+  });
+});
+// Rota para criar um novo livro
+app.post('/api/books', (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).json({ message: 'Usuário não está logado' });
+  }
+
+  const username = req.session.user.username;
+  const { title, color, content, shelfId } = req.body;
+
+  const query = 'INSERT INTO books (title, color, content, author) VALUES (?, ?, ?, ?)';
+  db.query(query, [title, color, content, username], (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: 'Erro ao criar o livro' });
+    }
+
+    const bookId = result.insertId;
+
+    // Se o livro for associado a uma estante, insere na tabela intermediária
+    if (shelfId) {
+      const shelfBookQuery = 'INSERT INTO shelves_books (id_shelf, id_book) VALUES (?, ?)';
+      db.query(shelfBookQuery, [shelfId, bookId], (err) => {
+        if (err) {
+          return res.status(500).json({ message: 'Erro ao associar o livro à estante' });
+        }
+
+        res.status(201).json({ message: 'Livro criado e associado à estante com sucesso' });
+      });
+    } else {
+      res.status(201).json({ message: 'Livro criado com sucesso' });
+    }
+  });
+});
+
+
+
+// Rota para buscar as estantes (shelves) do usuário logado
+app.get('/api/shelves', (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).json({ message: 'Usuário não está logado' });
+  }
+
+  const username = req.session.user.username;
+  const query = 'SELECT * FROM shelves WHERE author = ? ORDER BY name;';
+
+  db.query(query, [username], (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: 'Erro ao buscar estantes' });
+    }
+
+    res.json(results); // Retorna as estantes encontradas
+  });
+});
+// Rota para criar uma nova estante (shelf)
+app.post('/api/shelves', (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).json({ message: 'Usuário não está logado' });
+  }
+
+  const username = req.session.user.username;
+  const { name, color } = req.body;
+
+  const query = 'INSERT INTO shelves (name, color, author) VALUES (?, ?, ?)';
+  db.query(query, [name, color, username], (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: 'Erro ao criar a estante' });
+    }
+
+    res.status(201).json({ message: 'Estante criada com sucesso' });
+  });
+});
+
+
+
+// Rota para buscar os livros de uma estante específica ou "Todos os meus livros"
+app.get('/api/shelves/:id/books', (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).json({ message: 'Usuário não está logado' });
+  }
+
+  const username = req.session.user.username;
+  const shelfId = req.params.id;
+
+  let query;
+  let params;
+
+  if (shelfId === 'all') {
+    // Buscar todos os livros do usuário, independente de estante
+    query = 'SELECT * FROM books WHERE author = ? ORDER BY title;';
+    params = [username];
+  } else {
+    // Livros de uma estante específica
+    query = `
+      SELECT books.* FROM books 
+      JOIN shelves_books ON books.id = shelves_books.id_book
+      WHERE shelves_books.id_shelf = ? AND books.author = ?
+      ORDER BY title;
+    `;
+    params = [shelfId, username];
+  }
+
+  db.query(query, params, (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: 'Erro ao buscar livros da estante' });
+    }
+
+    res.json(results); // Retorna os livros encontrados
+  });
+});
+
+
+
+
 // Inicia o servidor
 app.listen(port, () => {
   console.log(`Servidor rodando na porta ${port}`);

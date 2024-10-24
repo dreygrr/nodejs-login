@@ -7,6 +7,9 @@
 }
 
 
+.nav-hitbox {display: block; width: 100vw; height: 65px;}
+
+
 nav {
   @include doFlex(row, space-between, center, 0);
   position: fixed;

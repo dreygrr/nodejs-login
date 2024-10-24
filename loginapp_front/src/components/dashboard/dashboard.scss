@@ -18,3 +18,40 @@
   bottom: 0; left: 50%;
   transform: translate(-50%, calc(0% - 1em));
 }
+
+.panel {
+  @include doFlex(row, stretch, start, 3em);
+
+  .shelves {
+    ul {
+      @include doFlex(column, start, stretch, .5em);
+      
+      .shelf {
+        > button {
+          @include doFlex(row, center, center, .5em);
+          padding: 1em;
+          border: none; border-radius: 0 1em 1em 0;
+          cursor: pointer;
+      
+          &::before {
+            content: '';
+            display: block;
+            width: 15px; height: 15px;
+            border-radius: .2em;
+            background-color: #2d2d2d;
+          }
+    
+          &::before {background-color: var(--shelf-color);}
+    
+          &.active {background-color: var(--blue100);}
+        }
+    
+        &:first-of-type {
+          button::before {display: none;}
+        }
+      }
+    }
+  }
+
+  .sep {display: block; width: 1px; height: 50vh; background-color: var(--slate300);}
+}

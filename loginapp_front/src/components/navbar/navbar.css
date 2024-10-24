@@ -74,6 +74,12 @@ h1 {
   --item-bg: rgba(255, 255, 255, 0.1);
 }
 
+.nav-hitbox {
+  display: block;
+  width: 100vw;
+  height: 65px;
+}
+
 nav {
   display: flex;
   flex-direction: row;

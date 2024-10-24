@@ -84,4 +84,53 @@ h1 {
   bottom: 0;
   left: 50%;
   transform: translate(-50%, calc(0% - 1em));
+}
+
+.panel {
+  display: flex;
+  flex-direction: row;
+  justify-content: stretch;
+  align-items: start;
+  gap: 3em;
+}
+.panel .shelves ul {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: stretch;
+  gap: 0.5em;
+}
+.panel .shelves ul .shelf > button {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5em;
+  padding: 1em;
+  border: none;
+  border-radius: 0 1em 1em 0;
+  cursor: pointer;
+}
+.panel .shelves ul .shelf > button::before {
+  content: "";
+  display: block;
+  width: 15px;
+  height: 15px;
+  border-radius: 0.2em;
+  background-color: #2d2d2d;
+}
+.panel .shelves ul .shelf > button::before {
+  background-color: var(--shelf-color);
+}
+.panel .shelves ul .shelf > button.active {
+  background-color: var(--blue100);
+}
+.panel .shelves ul .shelf:first-of-type button::before {
+  display: none;
+}
+.panel .sep {
+  display: block;
+  width: 1px;
+  height: 50vh;
+  background-color: var(--slate300);
 }/*# sourceMappingURL=dashboard.css.map */
