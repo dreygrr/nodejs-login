@@ -181,10 +181,12 @@ app.post('/api/books', (req, res) => {
           return res.status(500).json({ message: 'Erro ao associar o livro à estante' });
         }
 
-        res.status(201).json({ message: 'Livro criado e associado à estante com sucesso' });
+        // res.status(201).json({ message: 'Livro criado e associado à estante com sucesso' });
+        res.status(201).json({ id: bookId, title, color, content }); // Retorna o livro criado com o ID
       });
     } else {
-      res.status(201).json({ message: 'Livro criado com sucesso' });
+      // res.status(201).json({ message: 'Livro criado com sucesso' });
+      res.status(201).json({ id: bookId, title, color, content }); // Retorna o livro criado com o ID
     }
   });
 });
@@ -223,7 +225,8 @@ app.post('/api/shelves', (req, res) => {
       return res.status(500).json({ message: 'Erro ao criar a estante' });
     }
 
-    res.status(201).json({ message: 'Estante criada com sucesso' });
+    // res.status(201).json({ message: 'Estante criada com sucesso' });
+    res.status(201).json({ id: result.insertId, name, color }); // Retorna a estante criada com o ID
   });
 });
 

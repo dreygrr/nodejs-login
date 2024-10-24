@@ -1,0 +1,12 @@
+- foto de usuário, data de nascimento estatísticas de usuário (total de livros escritos, total de bibliotecas)
+
+- compartilhamento de livros/bibliotecas --> 'status' para livros e bibliotecas
+	usuário pode compartilhar uma biblioteca ou um livro, que podem ser públicos ou privados de acordo com sua preferência e configuração, permitindo que outros usuários acessem e leiam os livros; escrita compartilhada de livros.
+	
+- comunidade, feed de livros, comentários em bibliotecas/livros, opção para salvar/favoritar livros
+	
+- visualização 3d da biblioteca: estante com os livros do usuário em fila que, quando clicados, flutuam para o modo de visualização completa do livro clicado, saindo ou entrando na fila; organização da estante de livros de acordo com preferência do usuário.
+
+- exportação de livro para pdf.
+
+- opção de leitura/escrita em voz alta para acessibilidade.

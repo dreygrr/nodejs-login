@@ -39,36 +39,43 @@ const SignIn: React.FC = () => {
   
 
   return (
-    <form onSubmit={handleLogin}>
-      {message && <p style={{ color: 'green' }}>{message}</p>}
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+    <div className="default-form-container">
+      <form className='default-form' onSubmit={handleLogin}>
+        <h3>sign in</h3>
 
-      <div>
-        <label>Username</label>
-        <input
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-        />
-      </div>
+        {message && <p style={{ color: 'green' }}>{message}</p>}
+        {error && <p style={{ color: 'red' }}>{error}</p>}
+
+        <div className='field'>
+          <label>Username</label>
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+        </div>
       
-      <div>
-        <label>Password</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-      </div>
-      <button type="submit">Login</button>
+        <div className='field'>
+          <label>Password</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
 
-      <div className='links'>
-        <Link to="/signup">Ainda não tem uma conta? Cadastre-se aqui!</Link>
-        <Link to="/">Voltar para a home</Link>
-      </div>
-    </form>
+        <button className='btn' type="submit">Login</button>
+
+        <ul className='links'>
+          <li> Ainda não tem uma conta? <Link to="/signup">Cadastre-se aqui!</Link></li>
+          <li>
+            <Link to="/">Voltar para a home</Link>
+          </li>
+        </ul>
+      </form>
+    </div>
   );
 };
 

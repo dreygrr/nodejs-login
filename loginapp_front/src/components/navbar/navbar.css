@@ -53,6 +53,10 @@ h1 {
   scale: 1 0.85;
 }
 
+h3 {
+  font-size: 2rem;
+}
+
 .btn {
   display: flex;
   flex-direction: row;
