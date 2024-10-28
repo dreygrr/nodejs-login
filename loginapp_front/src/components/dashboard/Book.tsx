@@ -7,7 +7,40 @@ export default function Book({ book, onClose }) {
 
   useEffect(() => {
     if (isLoaded && splineAppRef.current && book) {
-      // Aguarda o carregamento completo e a existência das variáveis
+
+      // Alterar a cor do livro
+      const bookFace1 = splineAppRef.current.findObjectByName('face1');
+      if (bookFace1) {
+        console.log(bookFace1)
+        console.log(splineAppRef.current._sharedAssetsManager);
+
+        console.log(splineAppRef.current._sharedAssetsManager.data.colors);
+        console.log(splineAppRef.current._sharedAssetsManager.data.materials);
+        console.log(splineAppRef.current._sharedAssetsManager.data.variables);
+
+        console.log(splineAppRef.current.getVariables());
+        console.log(splineAppRef.current.findObjectByName('Faces'));
+
+        // console.log(splineAppRef.current.getAllObjects());
+
+        
+        
+        // Verifica se o material existe
+        if (bookFace1.material) {
+          // Verifica se o material tem a propriedade 'color'
+          if (bookFace1.material.color) {
+            bookFace1.material.color.set(book.color || '#ffffff'); // Define a cor
+          } else {
+            console.warn('Propriedade "color" não encontrada no material.');
+          }
+        } else {
+          console.warn('Material do objeto "face1" não encontrado.');
+        }
+      } else {
+        console.warn('Objeto "face1" não encontrado no Spline.');
+      }
+
+      // Definir o conteúdo do livro, como texto e título
       const text1Var = splineAppRef.current.getVariable('text1');
       const titleVar = splineAppRef.current.getVariable('title');
 
@@ -27,18 +60,15 @@ export default function Book({ book, onClose }) {
 
   const onLoad = (splineApp) => {
     splineAppRef.current = splineApp;
-
-    // Aguarda um curto intervalo para garantir que as variáveis estejam disponíveis
     setTimeout(() => {
       setIsLoaded(true);
       console.log('Spline carregado com sucesso!', book);
-    }, 500); // Pequeno atraso de 500ms para garantir que a cena esteja totalmente carregada
+    }, 500); // Pequeno atraso para garantir o carregamento
   };
 
   const saveBook = () => {
     const updatedText1 = splineAppRef.current.getVariable('text1');
     const updatedText2 = splineAppRef.current.getVariable('text2');
-
     alert(`Salvar conteúdo: ${updatedText1} ${updatedText2}`);
     // @todo - Salvar o conteúdo atualizado no banco de dados
   };
@@ -50,21 +80,12 @@ export default function Book({ book, onClose }) {
         onLoad={onLoad}
       />
 
-      <button
-        onClick={saveBook}
-        className='btn btn-save'
-        type="button"
-      >
+      <button onClick={saveBook} className='btn btn-save' type="button">
         <i className="fa-solid fa-cloud-arrow-up"></i>
         save
       </button>
 
-      {/* Botão para fechar e voltar à lista de livros */}
-      <button
-        onClick={onClose}
-        className='btn btn-close'
-        type="button"
-      >
+      <button onClick={onClose} className='btn btn-close' type="button">
         <i className="fa-solid fa-arrow-left"></i>
         Voltar
       </button>
