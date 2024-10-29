@@ -73,6 +73,58 @@ h3 {
   transition: 0.2s;
 }
 
+.default-form-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(45deg, var(--blue500) 0, var(--indigo400) 100%);
+}
+.default-form-container .default-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1em;
+  min-width: 450px;
+  max-width: 720px;
+  padding: 1.5em;
+  background-color: var(--white);
+  border-radius: 0.5em;
+}
+.default-form-container .default-form .field {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0em;
+  width: 100%;
+}
+.default-form-container .default-form .field label, .default-form-container .default-form .field input:not([type=submit]), .default-form-container .default-form .field textarea {
+  display: block;
+  width: 100%;
+}
+.default-form-container .default-form .field label {
+  font-weight: bold;
+}
+.default-form-container .default-form .field input:not([type=submit]) {
+  padding: 0.5em;
+  border: 1px solid var(--slate300);
+  background-color: var(--slate100);
+  border-radius: 0.25em;
+}
+.default-form-container .default-form .links {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5em;
+  list-style-type: none;
+}
+
 :root {
   --bg: linear-gradient(90deg, var(--blue950) 0, var(--slate950) 100%);
   --item-bg: rgba(255, 255, 255, 0.1);
