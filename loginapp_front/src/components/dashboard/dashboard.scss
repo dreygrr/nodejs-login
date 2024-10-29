@@ -37,6 +37,7 @@
       height: 100vh;
       background-color: var(--black);
       opacity: .5;
+      z-index: 2;
     }
   }
 
@@ -91,12 +92,38 @@
       flex-wrap: wrap;
 
       li.book {
+        position: relative;
         height: 150px; width: 100px;
         padding: .5em;
         background-color: var(--blue100);
         background-color: var(--book-color);
         border-radius: .2em;
         cursor: pointer;
+
+        &:focus .options, &:active .options, &:hover .options {opacity: 1;}
+
+        .options {
+          position: absolute;
+          bottom: 0; right: 0;
+          transform: translate(-.5em, -.5em);
+          @include doFlex(column, center, center, .5em);
+          opacity: 0;
+
+          transition: .2s;
+
+          button {
+            width: 30px; height: 30px;
+            border-radius: 100%;
+            border: none;
+            background-color: var(--slate200); color: var(--slate400);
+            opacity: .5;
+
+            cursor: pointer;
+            transition: .2s;
+
+            &:focus, &:hover, &:active {opacity: 1;}
+          }
+        }
       }
     }
   }

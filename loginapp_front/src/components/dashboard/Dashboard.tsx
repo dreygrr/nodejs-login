@@ -9,61 +9,67 @@ import "./dashboard.css";
 const Dashboard = () => {
   const [shelves, setShelves] = useState([]);
   const [books, setBooks] = useState([]);
+
   const [selectedShelf, setSelectedShelf] = useState('all');
+  const [selectedBook, setSelectedBook] = useState(null);
+  
   const [showShelfModal, setShowShelfModal] = useState(false);
   const [showBookModal, setShowBookModal] = useState(false);
+  
   const [newShelf, setNewShelf] = useState({ name: '', color: '' });
   const [newBook, setNewBook] = useState({ title: '', color: '', content: '', shelfId: null });
-  const [selectedBook, setSelectedBook] = useState(null);
+  
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchShelves = async () => {
-      try {
-        const response = await fetch('http://localhost:5000/api/shelves', {
-          method: 'GET',
-          credentials: 'include',
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          
-          console.log(data);
-          
-          setShelves([{ id: 'all', name: 'Todos os meus livros' }, ...data]);
-          setLoading(false);
-        } else {
-          console.error('Erro ao buscar estantes');
-        }
-      } catch (error) {
-        console.error('Erro na requisição:', error);
-        setLoading(false);
+  // Função para buscar as estantes
+  const fetchShelves = async () => {
+    setLoading(true); // Define como carregando antes de buscar
+    try {
+      const response = await fetch('http://localhost:5000/api/shelves', {
+        method: 'GET',
+        credentials: 'include',
+      });
+  
+      if (response.ok) {
+        const data = await response.json();
+        setShelves([{ id: 'all', name: `Todos os meus livros (${data.totalBooks})` }, ...data.shelves]);
+      } else {
+        console.error('Erro ao buscar estantes');
       }
-    };
+    } catch (error) {
+      console.error('Erro na requisição:', error);
+    } finally {
+      setLoading(false); // Certifique-se de parar o carregamento após a busca
+    }
+  };
 
+  // Função para buscar os livros com base na estante selecionada
+  const fetchBooks = async () => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/shelves/${selectedShelf}/books`, {
+        method: 'GET',
+        credentials: 'include',
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setBooks(data);
+      } else {
+        console.error('Erro ao buscar livros');
+      }
+    } catch (error) {
+      console.error('Erro na requisição:', error);
+    }
+  };
+
+  useEffect(() => {
     fetchShelves();
   }, []);
 
   useEffect(() => {
-    const fetchBooks = async () => {
-      try {
-        const response = await fetch(`http://localhost:5000/api/shelves/${selectedShelf}/books`, {
-          method: 'GET',
-          credentials: 'include',
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          setBooks(data);
-        } else {
-          console.error('Erro ao buscar livros');
-        }
-      } catch (error) {
-        console.error('Erro na requisição:', error);
-      }
-    };
-
-    fetchBooks();
+    if (selectedShelf) {
+      fetchBooks();
+    }
   }, [selectedShelf]);
 
   useEffect(() => {
@@ -114,10 +120,9 @@ const Dashboard = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newShelf),
       });
-
+  
       if (response.ok) {
-        const createdShelf = await response.json();
-        setShelves((prev) => [...prev, createdShelf]);
+        await fetchShelves(); // Recarrega as estantes após a criação
         setShowShelfModal(false);
         setNewShelf({ name: '', color: '' });
       }
@@ -134,15 +139,17 @@ const Dashboard = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newBook),
       });
-
+  
       if (response.ok) {
-        const createdBook = await response.json();
-        setBooks((prev) => [...prev, createdBook]);
+        await fetchBooks(); // Recarrega os livros após a criação
+        await fetchShelves(); // Recarrega as estantes para atualizar a contagem de livros
         setShowBookModal(false);
         setNewBook({ title: '', color: '', content: '', shelfId: null });
+      } else {
+        console.error('Erro ao criar livro');
       }
     } catch (error) {
-      console.error('Erro ao criar livro:', error);
+      console.error('Erro na requisição:', error);
     }
   };
 
@@ -173,24 +180,23 @@ const Dashboard = () => {
             </button>
 
             <ul>
-              <li className="shelf">
-                <button
-                  onClick={() => setSelectedShelf(null)}  // null para selecionar "Todos os livros"
-                  className={`shelf-btn ${selectedShelf === null ? 'active' : ''}`}
-                  style={{'--shelf-color': '#b0c4de'}}
-                >
-                  {`Todos os meus livros ()`}  {/* Exibe a quantidade total de livros */}
-                </button>
-              </li>
-              
-              {shelves.map((shelf) => (
+              {shelves.map((shelf, id) => (
                 <li className="shelf" key={shelf.id}>
                   <button
                     onClick={() => setSelectedShelf(shelf.id)}
                     className={`shelf-btn ${selectedShelf === shelf.id ? 'active' : ''}`}
                     style={{'--shelf-color': `${shelf.color}`}}
                   >
-                    {`${shelf.name} (${shelf.bookCount || 0})`}  {/* Exibe a contagem de livros */}
+                    {`
+                      ${
+                        id == 0 ?
+                          <b>eita</b>
+                        : 
+                          `${shelf.name} (${shelf.bookCount})` || 0
+                      }
+                    `}
+
+                    {/* {`${shelf.name} ${id == 0 ? '' : `(${shelf.bookCount})` || 0}`} */}
                   </button>
                 </li>
               ))}
@@ -216,6 +222,10 @@ const Dashboard = () => {
                   style={{'--book-color': `${book.color}`}}
                   onClick={() => handleBookClick(book)}
                 >
+                  <div className="options">
+                    <button className='btn-trash' type="button"><i className="fa-solid fa-trash"/></button>
+                    <button className='btn-edit' type="button"><i className="fa-solid fa-pen"/></button>
+                  </div>
                   {book.title}
                 </li>
               ))}
@@ -236,7 +246,7 @@ const Dashboard = () => {
             onCreate={handleCreateBook}
             book={newBook}
             setBook={setNewBook}
-            shelves={shelves}
+            shelves={shelves.filter((shelf) => shelf.id !== 'all')}
           />
         </div>
       )}
