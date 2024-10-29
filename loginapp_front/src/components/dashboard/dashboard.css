@@ -57,6 +57,10 @@ h3 {
   font-size: 2rem;
 }
 
+#root {
+  overflow-x: hidden;
+}
+
 .btn {
   display: flex;
   flex-direction: row;
@@ -75,12 +79,14 @@ h3 {
 
 .default-form-container {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 0;
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
+  height: auto;
+  padding: 1em;
   background: linear-gradient(45deg, var(--blue500) 0, var(--indigo400) 100%);
 }
 .default-form-container .default-form {
@@ -148,11 +154,26 @@ h3 {
 }
 
 .panel {
+  position: relative;
   display: flex;
   flex-direction: row;
   justify-content: stretch;
   align-items: stretch;
   gap: 0;
+}
+.panel.modal-active {
+  pointer-events: none;
+  height: calc(100vh - 65px);
+  overflow-y: hidden;
+}
+.panel.modal-active::before {
+  position: absolute;
+  content: "";
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--black);
+  opacity: 0.5;
 }
 .panel .tab {
   display: flex;
@@ -233,4 +254,34 @@ h3 {
   width: 1px;
   height: 100%;
   background-color: var(--slate300);
+}
+
+.modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: auto !important;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  gap: 1em;
+  padding: 2em;
+  background-color: var(--white);
+  border-radius: 0.5em;
+}
+.modal .rightcorner-btn {
+  position: absolute;
+  right: 0;
+  top: 0;
+  transform: translate(-1em, 1em);
+  width: 40px;
+  height: 40px;
+  border-radius: 100%;
+  border: none;
+  background-color: var(--slate200);
+  color: var(--slate500);
+  cursor: pointer;
 }/*# sourceMappingURL=dashboard.css.map */

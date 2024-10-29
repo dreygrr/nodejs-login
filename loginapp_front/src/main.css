@@ -57,6 +57,10 @@ h3 {
   font-size: 2rem;
 }
 
+#root {
+  overflow-x: hidden;
+}
+
 .btn {
   display: flex;
   flex-direction: row;
@@ -75,12 +79,14 @@ h3 {
 
 .default-form-container {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 0;
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
+  height: auto;
+  padding: 1em;
   background: linear-gradient(45deg, var(--blue500) 0, var(--indigo400) 100%);
 }
 .default-form-container .default-form {

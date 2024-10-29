@@ -21,11 +21,29 @@
 }
 
 .panel {
+  position: relative;
   @include doFlex(row, stretch, stretch, 0);
+
+  &.modal-active {
+    pointer-events: none;
+    height: calc(100vh - 65px);
+    overflow-y: hidden;
+
+    &::before {
+      position: absolute;
+      content: '';
+      display: block;
+      width: 100vw;
+      height: 100vh;
+      background-color: var(--black);
+      opacity: .5;
+    }
+  }
 
   .tab {
     @include doFlex(column, start, start, 1em);
     padding: 2em;
+    // pointer-events: auto;
 
     ul {list-style-type: none;}
   }
@@ -84,4 +102,31 @@
   }
 
   .sep {display: block; width: 1px; height: 100%; background-color: var(--slate300);}
+}
+
+
+
+.modal { 
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: auto !important;
+  z-index: 10;
+  @include doFlex(column, center, stretch, 1em);
+  padding: 2em;
+
+  background-color: var(--white);
+  border-radius: .5em;
+
+  .rightcorner-btn {
+    position: absolute;
+    right: 0; top: 0;
+    transform: translate(-1em, 1em);
+    width: 40px; height: 40px;
+    border-radius: 100%;
+    border: none;
+
+    background-color: var(--slate200); color: var(--slate500);
+    cursor: pointer;
+  }
 }
