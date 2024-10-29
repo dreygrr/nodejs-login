@@ -193,23 +193,56 @@ app.post('/api/books', (req, res) => {
 
 
 
-// Rota para buscar as estantes (shelves) do usuário logado
+// Rota para buscar as estantes e a quantidade total de livros
 app.get('/api/shelves', (req, res) => {
   if (!req.session.user) {
     return res.status(401).json({ message: 'Usuário não está logado' });
   }
 
   const username = req.session.user.username;
-  const query = 'SELECT * FROM shelves WHERE author = ? ORDER BY name;';
 
-  db.query(query, [username], (err, results) => {
+  // Query para buscar estantes e contar os livros por estante
+  const shelfQuery = `
+    SELECT 
+      shelves.id, 
+      shelves.name, 
+      shelves.color, 
+      COUNT(shelves_books.id_book) AS bookCount
+    FROM shelves
+    LEFT JOIN shelves_books ON shelves.id = shelves_books.id_shelf
+    WHERE shelves.author = ?
+    GROUP BY shelves.id
+    ORDER BY shelves.name;
+  `;
+
+  // Query para contar o total de livros do usuário
+  const totalBooksQuery = `
+    SELECT COUNT(books.id) AS totalBooks 
+    FROM books 
+    WHERE books.author = ?;
+  `;
+
+  db.query(shelfQuery, [username], (err, shelves) => {
     if (err) {
       return res.status(500).json({ message: 'Erro ao buscar estantes' });
     }
 
-    res.json(results); // Retorna as estantes encontradas
+    // Fazer a segunda query para contar todos os livros
+    db.query(totalBooksQuery, [username], (err, totalBooksResult) => {
+      if (err) {
+        return res.status(500).json({ message: 'Erro ao contar livros' });
+      }
+
+      const totalBooks = totalBooksResult[0].totalBooks;
+
+      // Retornar as estantes e a contagem total de livros
+      res.json({ shelves, totalBooks });
+    });
   });
 });
+
+
+
 // Rota para criar uma nova estante (shelf)
 app.post('/api/shelves', (req, res) => {
   if (!req.session.user) {

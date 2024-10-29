@@ -1,7 +1,10 @@
+import React, { useEffect, useState } from 'react';
 import Navbar from "./../navbar/Navbar";
 import Book from "./Book";
+import ShelfModal from './ShelfModal';
+import BookModal from './BookModal';
+
 import "./dashboard.css";
-import React, { useEffect, useState } from 'react';
 
 const Dashboard = () => {
   const [shelves, setShelves] = useState([]);
@@ -12,10 +15,9 @@ const Dashboard = () => {
   const [newShelf, setNewShelf] = useState({ name: '', color: '' });
   const [newBook, setNewBook] = useState({ title: '', color: '', content: '', shelfId: null });
   const [selectedBook, setSelectedBook] = useState(null);
-  const [loading, setLoading] = useState(true); // Adicione um estado de carregamento
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Busca todas as estantes do usuário
     const fetchShelves = async () => {
       try {
         const response = await fetch('http://localhost:5000/api/shelves', {
@@ -25,14 +27,17 @@ const Dashboard = () => {
 
         if (response.ok) {
           const data = await response.json();
-          setShelves([{ id: 'all', name: 'Todos os meus livros' }, ...data]); // Adiciona "Todos os meus livros" como opção padrão
-          setLoading(false); // Dados carregados, remove o estado de loading
+          
+          console.log(data);
+          
+          setShelves([{ id: 'all', name: 'Todos os meus livros' }, ...data]);
+          setLoading(false);
         } else {
           console.error('Erro ao buscar estantes');
         }
       } catch (error) {
         console.error('Erro na requisição:', error);
-        setLoading(false); // Mesmo em erro, removemos o loading
+        setLoading(false);
       }
     };
 
@@ -40,7 +45,6 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
-    // Busca os livros de acordo com a estante selecionada
     const fetchBooks = async () => {
       try {
         const response = await fetch(`http://localhost:5000/api/shelves/${selectedShelf}/books`, {
@@ -50,7 +54,7 @@ const Dashboard = () => {
 
         if (response.ok) {
           const data = await response.json();
-          setBooks(data); // Define os livros no estado
+          setBooks(data);
         } else {
           console.error('Erro ao buscar livros');
         }
@@ -59,14 +63,49 @@ const Dashboard = () => {
       }
     };
 
-    fetchBooks(); // Chama a função ao montar o componente ou ao trocar a estante
+    fetchBooks();
   }, [selectedShelf]);
+
+  useEffect(() => {
+    // Função para fechar o modal ao pressionar "Esc"
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        if (showShelfModal) {
+          setShowShelfModal(false);
+        }
+        if (showBookModal) {
+          setShowBookModal(false);
+        }
+      }
+    };
+
+    // Adiciona o event listener quando o modal está aberto
+    if (showShelfModal || showBookModal) {
+      document.addEventListener('keydown', handleKeyDown);
+    }
+
+    // Remove o event listener quando o modal é fechado
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [showShelfModal, showBookModal]);
 
   if (loading) {
     return <div>Carregando...</div>;
   }
 
-  // Função para criar uma nova estante
+  // Função para abrir o modal de criação de estante
+  const openShelfModal = () => {
+    setShowBookModal(false);  // Garante que o modal de Livro seja fechado
+    setShowShelfModal(true);  // Abre o modal de Estante
+  };
+
+  // Função para abrir o modal de criação de livro
+  const openBookModal = () => {
+    setShowShelfModal(false);  // Garante que o modal de Estante seja fechado
+    setShowBookModal(true);    // Abre o modal de Livro
+  };
+
   const handleCreateShelf = async () => {
     try {
       const response = await fetch('http://localhost:5000/api/shelves', {
@@ -75,19 +114,18 @@ const Dashboard = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newShelf),
       });
+
       if (response.ok) {
+        const createdShelf = await response.json();
+        setShelves((prev) => [...prev, createdShelf]);
         setShowShelfModal(false);
         setNewShelf({ name: '', color: '' });
-        // Atualiza a lista de estantes após criar
-        const createdShelf = await response.json(); // Recebe a estante recém-criada
-        setShelves((prev) => [...prev, createdShelf]); // Adiciona a nova estante à lista
       }
     } catch (error) {
       console.error('Erro ao criar estante:', error);
     }
   };
 
-  // Função para criar um novo livro
   const handleCreateBook = async () => {
     try {
       const response = await fetch('http://localhost:5000/api/books', {
@@ -96,10 +134,10 @@ const Dashboard = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newBook),
       });
-  
+
       if (response.ok) {
-        const createdBook = await response.json(); // Recebe o livro recém-criado
-        setBooks((prev) => [...prev, createdBook]); // Adiciona o novo livro à lista
+        const createdBook = await response.json();
+        setBooks((prev) => [...prev, createdBook]);
         setShowBookModal(false);
         setNewBook({ title: '', color: '', content: '', shelfId: null });
       }
@@ -109,11 +147,11 @@ const Dashboard = () => {
   };
 
   const handleBookClick = (book) => {
-    setSelectedBook(book); // Atualiza o estado com o livro selecionado
+    setSelectedBook(book);
   };
 
   const handleCloseBook = () => {
-    setSelectedBook(null); // Fecha a viewport do livro e volta para a lista
+    setSelectedBook(null);
   };
 
   return (
@@ -123,96 +161,83 @@ const Dashboard = () => {
       {selectedBook ? (
         <Book book={selectedBook} onClose={handleCloseBook} />
       ) : (
-        <div className="panel">
+        <div className={`panel ${showShelfModal || showBookModal ? 'modal-active' : ''}`}>
           <div className="shelves tab">
             <h3>Estantes</h3>
             <button 
               className="btn create-shelf"
-              onClick={() => setShowShelfModal(true)}
+              onClick={openShelfModal}  // Usa a função para abrir o modal de Estante
             >
               <i className="fa-regular fa-plus"/>
               Criar Estante
             </button>
 
             <ul>
+              <li className="shelf">
+                <button
+                  onClick={() => setSelectedShelf(null)}  // null para selecionar "Todos os livros"
+                  className={`shelf-btn ${selectedShelf === null ? 'active' : ''}`}
+                  style={{'--shelf-color': '#b0c4de'}}
+                >
+                  {`Todos os meus livros (${totalBooks})`}  {/* Exibe a quantidade total de livros */}
+                </button>
+              </li>
+              
               {shelves.map((shelf) => (
                 <li className="shelf" key={shelf.id}>
                   <button
                     onClick={() => setSelectedShelf(shelf.id)}
                     className={`shelf-btn ${selectedShelf === shelf.id ? 'active' : ''}`}
-                    style={{'--shelf-color': `${shelf.color}`,}}
+                    style={{'--shelf-color': `${shelf.color}`}}
                   >
-                    {shelf.name}
+                    {`${shelf.name} (${shelf.bookCount || 0})`}  {/* Exibe a contagem de livros */}
                   </button>
                 </li>
               ))}
             </ul>
           </div>
 
-        <div className="books tab">
-          <h3>Livros</h3>
+          <div className="books tab">
+            <h3>Livros</h3>
 
-          <button 
-            className="btn create-book"
-            onClick={() => setShowBookModal(true)}
-          >
-            <i className="fa-regular fa-plus"/>
-            Criar Livro
-          </button>
+            <button 
+              className="btn create-book"
+              onClick={openBookModal}  // Usa a função para abrir o modal de Livro
+            >
+              <i className="fa-regular fa-plus"/>
+              Criar Livro
+            </button>
 
-          <ul>
-            {books.map((book) => (
-              <li
-                key={book.id}
-                className="book"
-                style={{'--book-color': `${book.color}`,}}
-                onClick={() => handleBookClick(book)}
-              >
-                {book.title}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-      )}
+            <ul>
+              {books.map((book) => (
+                <li
+                  key={book.id}
+                  className="book"
+                  style={{'--book-color': `${book.color}`}}
+                  onClick={() => handleBookClick(book)}
+                >
+                  {book.title}
+                </li>
+              ))}
+            </ul>
+          </div>
 
-      {/* Modal para criar nova estante */}
-      {showShelfModal && (
-        <div>
-          <h3>Criar Nova Estante</h3>
-
-          <input type="text" placeholder="Nome da Estante" value={newShelf.name} onChange={(e) => setNewShelf({ ...newShelf, name: e.target.value })} />
-
-          {/* <input type="text" placeholder="Cor da Estante" value={newShelf.color} onChange={(e) => setNewShelf({ ...newShelf, color: e.target.value })} /> */}
-          <input type="color" placeholder="Cor da Estante" value={newShelf.color} onChange={(e) => setNewShelf({ ...newShelf, color: e.target.value })} />
-
-          <button onClick={handleCreateShelf}>Criar</button>
-          <button onClick={() => setShowShelfModal(false)}>Cancelar</button>
-        </div>
-      )}
-
-      {/* Modal para criar novo livro */}
-      {showBookModal && (
-        <div>
-          <h3>Criar Novo Livro</h3>
-
-          <input type="text" placeholder="Título do Livro" value={newBook.title} onChange={(e) => setNewBook({ ...newBook, title: e.target.value })} />
-
-          {/* <input type="text" placeholder="Cor do Livro" value={newBook.color} onChange={(e) => setNewBook({ ...newBook, color: e.target.value })} /> */}
-          <input type="color" placeholder="Cor do Livro" name="bookColor" id="bookColorId" 
-          value={newBook.color} onChange={(e) => setNewBook({ ...newBook, color: e.target.value})}/>
-
-          <textarea placeholder="Conteúdo" value={newBook.content} onChange={(e) => setNewBook({ ...newBook, content: e.target.value })}></textarea>
-
-          <select onChange={(e) => setNewBook({ ...newBook, shelfId: e.target.value })}>
-            <option key="none" value={null}>Nenhuma Estante</option> {/* Adicione uma key "none" */}
-            {shelves.map((shelf) => (
-              <option key={shelf.id} value={shelf.id}>{shelf.name}</option>
-            ))}
-          </select>
-
-          <button onClick={handleCreateBook}>Criar</button>
-          <button onClick={() => setShowBookModal(false)}>Cancelar</button>
+          <ShelfModal
+            show={showShelfModal}
+            onClose={() => setShowShelfModal(false)}
+            onCreate={handleCreateShelf}
+            shelf={newShelf}
+            setShelf={setNewShelf}
+          />
+    
+          <BookModal
+            show={showBookModal}
+            onClose={() => setShowBookModal(false)}
+            onCreate={handleCreateBook}
+            book={newBook}
+            setBook={setNewBook}
+            shelves={shelves}
+          />
         </div>
       )}
     </>

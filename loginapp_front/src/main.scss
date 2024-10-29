@@ -65,6 +65,10 @@ h3 {font-size: 2rem;}
 
 
 
+#root {overflow-x: hidden}
+
+
+
 .btn {
   @include doFlex(row, center, center, 1em);
   padding: 1em;
@@ -79,9 +83,10 @@ h3 {font-size: 2rem;}
 
 // forms
 .default-form-container {
-  @include doFlex(row, center, center, 0);
+  @include doFlex(column, center, center, 0);
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh; height: auto;
+  padding: 1em;
   background: linear-gradient(45deg, var(--blue500) 0, var(--indigo400) 100%);
 
   .default-form {
