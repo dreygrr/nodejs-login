@@ -179,7 +179,7 @@ const Dashboard = () => {
                   className={`shelf-btn ${selectedShelf === null ? 'active' : ''}`}
                   style={{'--shelf-color': '#b0c4de'}}
                 >
-                  {`Todos os meus livros (${totalBooks})`}  {/* Exibe a quantidade total de livros */}
+                  {`Todos os meus livros ()`}  {/* Exibe a quantidade total de livros */}
                 </button>
               </li>
               
