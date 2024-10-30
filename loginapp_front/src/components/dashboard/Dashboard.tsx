@@ -187,16 +187,13 @@ const Dashboard = () => {
                     className={`shelf-btn ${selectedShelf === shelf.id ? 'active' : ''}`}
                     style={{'--shelf-color': `${shelf.color}`}}
                   >
-                    {`
-                      ${
-                        id == 0 ?
-                          <b>eita</b>
-                        : 
-                          `${shelf.name} (${shelf.bookCount})` || 0
-                      }
-                    `}
-
-                    {/* {`${shelf.name} ${id == 0 ? '' : `(${shelf.bookCount})` || 0}`} */}
+                    {
+                      id === 0 ? (
+                        <span><i className="fa-solid fa-books"/> {shelf.name}</span>
+                      ) : (
+                        `${shelf.name} (${shelf.bookCount || 0})`
+                      )
+                    }
                   </button>
                 </li>
               ))}

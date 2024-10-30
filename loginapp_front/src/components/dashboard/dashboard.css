@@ -216,10 +216,14 @@ h3 {
 .panel .shelves ul .shelf > button::before {
   content: "";
   display: block;
-  width: 15px;
-  height: 15px;
+  width: 20px;
+  height: 20px;
   border-radius: 0.2em;
   background-color: #2d2d2d;
+  -webkit-mask-image: url("../../assets/img/label_24dp.svg");
+          mask-image: url("../../assets/img/label_24dp.svg");
+  -webkit-mask-size: 100%;
+          mask-size: 100%;
 }
 .panel .shelves ul .shelf > button::before {
   background-color: var(--shelf-color);
@@ -229,6 +233,13 @@ h3 {
 }
 .panel .shelves ul .shelf:first-of-type button::before {
   display: none;
+}
+.panel .shelves ul .shelf:first-of-type span {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5em;
 }
 .panel .books {
   width: 100%;

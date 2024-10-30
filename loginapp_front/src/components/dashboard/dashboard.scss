@@ -67,9 +67,12 @@
           &::before {
             content: '';
             display: block;
-            width: 15px; height: 15px;
+            width: 20px; height: 20px;
             border-radius: .2em;
             background-color: #2d2d2d;
+
+            mask-image: url('../../assets/img/label_24dp.svg');
+            mask-size: 100%;
           }
     
           &::before {background-color: var(--shelf-color);}
@@ -79,6 +82,8 @@
     
         &:first-of-type {
           button::before {display: none;}
+
+          span {@include doFlex(row, center, center, .5em);}
         }
       }
     }
